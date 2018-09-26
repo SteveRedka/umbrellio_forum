@@ -27,10 +27,12 @@ ActiveRecord::Schema.define(version: 2018_09_26_160613) do
 
   create_table "ratings", force: :cascade do |t|
     t.bigint "post_id"
+    t.bigint "user_id"
     t.integer "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_ratings_on_post_id"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -41,4 +43,5 @@ ActiveRecord::Schema.define(version: 2018_09_26_160613) do
 
   add_foreign_key "posts", "users"
   add_foreign_key "ratings", "posts"
+  add_foreign_key "ratings", "users"
 end

@@ -23,6 +23,7 @@ end
 group :test do
   gem 'factory_bot'
   gem 'rspec-rails'
+  gem 'database_cleaner'
 end
 
 group :production do

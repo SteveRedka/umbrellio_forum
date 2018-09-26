@@ -1,10 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Rating, type: :model do
-  context 'value' do
-    it 'should not be less than 1'
-    it 'should not be more than 5'
-    it 'should not be blank'
+  let!(:rating) { create :rating }
+
+  it 'should belong to user' do
+    rating.user = nil
+    expect(rating).not_to be_valid
   end
-  it 'should always belong to post'
+
+  it 'should belong to post' do
+    rating.post = nil
+    expect(rating).not_to be_valid
+  end
 end
