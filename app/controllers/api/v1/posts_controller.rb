@@ -7,6 +7,7 @@ class Api::V1::PostsController < ApplicationController
     @post.user = @user
     @post.ip = '0.0.0.0'
     @post.save
+    raise ArgumentError, @post.errors.messages
     render json: @post
   end
 
