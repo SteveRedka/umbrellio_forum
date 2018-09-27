@@ -21,7 +21,7 @@ module JSONErrors
     end
 
     def render_errors(messages = ['Internal server error'],
-                      status = status)
+                      status = 500)
       result = { 'error': messages }
       render json: result, status: status
     end

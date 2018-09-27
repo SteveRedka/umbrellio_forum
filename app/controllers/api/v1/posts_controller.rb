@@ -5,9 +5,10 @@ class Api::V1::PostsController < ApplicationController
   def create
     @post = Post.new(post_params)
     @post.user = @user
-    @post.ip = '0.0.0.0'
+    @post.ip = user_params[:ip]
+    raise ArgumentError, @post.errors.messages unless @post.valid?
+
     @post.save
-    raise ArgumentError, @post.errors.messages
     render json: @post
   end
 
@@ -26,7 +27,7 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:login)
+    params.require(:user).permit(:login, :ip)
   end
 
   def set_user

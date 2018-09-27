@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Posts', type: :request do
   describe 'POST /api/v1/posts' do
-    let!(:user) { create :user, login: 'author' }
-    valid_post = { header: 'header', content: 'foo' }
-    valid_user = { login: 'author' }
+    valid_post = { header: 'foo', content: 'bar' }
+    valid_user = { login: 'author', ip: '0.0.0.0' }
+
+    let!(:user) { create :user, login: valid_user[:login] }
 
     context 'with valid inputs' do
       it 'creates post' do
@@ -13,6 +14,8 @@ RSpec.describe 'Api::V1::Posts', type: :request do
                                          user: valid_user })
         end.to change { Post.count }.by(1)
         expect(response).to have_http_status(200)
+        expect(response.body).to include(valid_post[:header])
+        expect(response.body).to include(valid_post[:content])
         expect(Post.last.user).to eq(user)
       end
 
