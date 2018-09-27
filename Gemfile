@@ -7,6 +7,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.1'
 
+# Used for random user logins:
+gem 'faker'
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'guard'
