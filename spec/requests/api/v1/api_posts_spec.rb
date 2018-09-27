@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Posts', type: :request do
-  describe 'POST /api/v1/posts' do
+  describe 'POST /api/posts' do
     valid_post = { header: 'foo', content: 'bar' }
     valid_user = { login: 'author', ip: '0.0.0.0' }
 
@@ -64,5 +64,9 @@ RSpec.describe 'Api::V1::Posts', type: :request do
         end
       end
     end
+  end
+
+  describe 'GET /api/posts' do
+    it 'lists top 10 posts based on average rating'
   end
 end
