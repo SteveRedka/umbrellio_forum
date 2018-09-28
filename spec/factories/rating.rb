@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :rating do
-    value 3
+    value { Random.new.rand(1..5) }
     association :post, factory: :post
   end
 end

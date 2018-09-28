@@ -1,6 +1,6 @@
 class Api::V1::PostsController < ApplicationController
   include JSONErrors
-  before_action :set_user, only: %i[create rate]
+  before_action :set_user, only: %i[create]
 
   def create
     @post = Post.new(post_params)
@@ -13,11 +13,14 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def rate
+    @post = Post.find(rating_params[:post_id])
+    @rating = @post.ratings.create(rating_params)
+    render json: { 'post': @post.id, 'new rating': @post.average_rating }
   end
 
   def index
-    @posts = Post.all
-    render @posts
+    @posts = Post.all.limit(10)
+    render json: @posts, only: [:id, :header, :content], methods: :average_rating
   end
 
   private
@@ -27,7 +30,11 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:login, :ip)
+    params.require('user').permit(:login, :ip)
+  end
+
+  def rating_params
+    params.require('rating').permit(:value, :post_id)
   end
 
   def set_user
