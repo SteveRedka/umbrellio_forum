@@ -8,4 +8,6 @@ class Post < ApplicationRecord
 
     ratings.inject(0.0) { |sum, rating| sum + rating.value } / ratings.size
   end
+
+  persistize :average_rating, depending_on: :ratings
 end
