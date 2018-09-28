@@ -19,8 +19,12 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def index
-    @posts = Post.all.limit(10)
-    render json: @posts, only: [:id, :header, :content], methods: :average_rating
+    order = 'avg(ratings.value) desc'
+    @posts = Post.joins(:ratings)
+                 .group('posts.id')
+                 .order(Arel.sql(order))
+                 .limit(10)
+    render json: @posts, only: %i[id header content]
   end
 
   private

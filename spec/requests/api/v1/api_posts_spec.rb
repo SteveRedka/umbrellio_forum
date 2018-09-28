@@ -112,17 +112,12 @@ RSpec.describe 'Api::V1::Posts', type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it 'lists average ratings' do
-      get api_posts_path
-      expect(response.body).to include('average_rating')
-    end
-
     it 'orders posts based on their rating' do
       get api_posts_path
       json_response = JSON.parse(response.body)
       json_response[0...-1].each_with_index do |pst, i|
-        this_posts_rating = pst['average_rating']
-        next_posts_rating = json_response[i + 1]['average_rating']
+        this_posts_rating = Post.find(pst['id']).average_rating
+        next_posts_rating = Post.find(json_response[i + 1]['id']).average_rating
         expect(this_posts_rating).to be >= next_posts_rating
       end
     end
