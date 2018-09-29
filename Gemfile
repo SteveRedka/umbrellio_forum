@@ -14,6 +14,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'guard'
   gem 'guard-rspec'
+  gem 'http'
 end
 
 group :development do
