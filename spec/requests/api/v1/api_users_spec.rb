@@ -23,9 +23,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
     end
 
     it 'returns lists of users who posted from those ips' do
-      json_response = JSON.parse(response.body)
-      expect(json_response[troll_ip]).to include(user1.login)
-      expect(json_response[troll_ip]).to include(user2.login)
+      expect(response.body).to include(user1.login)
+      expect(response.body).to include(user2.login)
     end
   end
 end

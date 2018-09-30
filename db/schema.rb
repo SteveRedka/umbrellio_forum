@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_28_104337) do
+ActiveRecord::Schema.define(version: 2018_09_30_013844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "poster_ips", force: :cascade do |t|
+    t.string "ip"
+    t.text "user_ids", default: [], array: true
+    t.text "user_logins", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "posts", force: :cascade do |t|
     t.bigint "user_id"
@@ -22,6 +30,8 @@ ActiveRecord::Schema.define(version: 2018_09_28_104337) do
     t.string "ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "poster_ip_id"
+    t.index ["poster_ip_id"], name: "index_posts_on_poster_ip_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -39,6 +49,7 @@ ActiveRecord::Schema.define(version: 2018_09_28_104337) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "posts", "poster_ips"
   add_foreign_key "posts", "users"
   add_foreign_key "ratings", "posts"
 end

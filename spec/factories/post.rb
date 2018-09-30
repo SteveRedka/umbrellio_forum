@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :post do
     header { Faker::Lorem.sentence }
     content { Faker::Lorem.paragraph(2) }
+    ip { '127.0.0.1' }
 
     association :user, factory: :user
 
