@@ -1,8 +1,9 @@
 module Posts
+  # Handles #create request in posts_controller.rb
   class PostCreateHandler
     include ActiveModel::Validations
-    validates :header, :content, length: { minimum: 3 }
     attr_reader :header, :content
+    validates :header, :content, length: { minimum: 3 }
 
     def initialize(params)
       @header = params[:header]
@@ -28,10 +29,11 @@ module Posts
 
     def set_poster_ip
       @poster_ip = PosterIp.find_or_initialize_by(ip: @ip)
-      return if !@poster_ip.new_record? && @poster_ip.user_ids.include?(@user.id.to_s)
+      return if !@poster_ip.new_record? &&
+                @poster_ip.user_ids.include?(@user.id.to_s)
 
-      @poster_ip.user_ids = @poster_ip.user_ids << @user.id.to_s
-      @poster_ip.user_logins = @poster_ip.user_logins << @user.login
+      @poster_ip.user_ids << @user.id.to_s
+      @poster_ip.user_logins << @user.login
       @poster_ip.save
       @poster_ip
     end
