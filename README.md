@@ -37,10 +37,10 @@ curl -H "Content-Type: application/json" -X GET https://umbrellio-forum.herokuap
 
 Try locally
 ------
-### Prequesites
-Postgresql 9+
-Ruby 2.4.1
-Bundler
+### Prerequisites
+* Postgresql 9+
+* Ruby 2.4.1
+* Bundler
 
 ### Setup
 ```
