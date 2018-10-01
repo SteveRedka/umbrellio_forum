@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   namespace 'api' do
     scope module: :v1 do
       resources :posts, only: %i[index create]
-      post 'rate/(:id)', to: 'posts#rate', as: 'rate'
+      post 'rate/(:id)', to: 'ratings#rate', as: 'rate'
       namespace :users do
         get 'list_trolls'
       end
