@@ -1,24 +1,54 @@
-# README
+Umbrellio forum
+======
+Dummy SaaS app built for tech interview.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[Demo on heroku](https://umbrellio-forum.herokuapp.com/api/posts)
 
-Things you may want to cover:
+Actions
+------
+#### GET /api/posts
+List top 10 posts based on their average rating:
 
-* Ruby version
+[https://umbrellio-forum.herokuapp.com/api/posts](https://umbrellio-forum.herokuapp.com/api/posts)
 
-* System dependencies
+```
+curl -H "Content-Type: application/json" -X GET https://umbrellio-forum.herokuapp.com/api/posts
+```
 
-* Configuration
+#### POST /api/posts
+Creates a new post. Also creates an author, if it doesn't exist already, and keeps track of ips. Requires ip passed as an argument: it doesn't gather them from `remote_request`.
 
-* Database creation
+```
+curl -H "Content-Type: application/json" -X POST -d '{ header: "Lorem", content: "Ipsum", ip: "8.8.8.8", login: "me" }' https://umbrellio-forum.herokuapp.com/api/posts
+```
 
-* Database initialization
+#### POST /api/rate
+Rates a post by id. Value can be between 1 and 5.
 
-* How to run the test suite
+```
+curl -H "Content-Type: application/json" -X POST -d '{"post_id": "3", "value": "3"}' https://umbrellio-forum.herokuapp.com/api/rate
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+#### GET /api/list_trolls
+Lists all ip addresses which were used by several authors. With said authors logins.
+```
+curl -H "Content-Type: application/json" -X GET https://umbrellio-forum.herokuapp.com/api/users/list_trolls
+```
 
-* Deployment instructions
+Try locally
+------
+### Prequesites
+Postgresql 9+
+Ruby 2.4.1
+Bundler
 
-* ...
+### Setup
+```
+git clone git@github.com:SteveRedka/umbrellio_forum.git
+cd umbrellio_forum
+bundle
+rake db:setup
+rails server
+```
+
+The `rake db:setup` task is pretty huge. It can be interrupted as early as you please.
