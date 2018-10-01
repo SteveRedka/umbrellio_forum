@@ -3,7 +3,7 @@ class Api::V1::PostsController < ApplicationController
 
   def create
     @post = Posts::PostCreateHandler.new(post_params).call
-    render json: @post
+    render json: @post, except: %i[created_at updated_at poster_ip_id]
   end
 
   def rate
