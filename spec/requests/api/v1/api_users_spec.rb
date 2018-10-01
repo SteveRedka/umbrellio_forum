@@ -5,12 +5,14 @@ RSpec.describe 'Api::V1::Users', type: :request do
     legit_ip = '127.0.0.1'
     troll_ip = '8.8.8.8'
     let!(:user1) { create :user }
-    let!(:user2) { create :user }
+    let!(:troll1) { create :user }
+    let!(:troll2) { create :user }
 
     before do
-      create :post, user: user1, ip: legit_ip
-      create :post, user: user1, ip: troll_ip
-      create :post, user: user2, ip: troll_ip
+      create :poster_ip, ip: legit_ip, user_ids: [user1.id],
+                        user_logins: [user1.login]
+      create :poster_ip, ip: troll_ip, user_ids: [troll1.id, troll2.id],
+                        user_logins: [troll1.login, troll2.login]
       get(api_users_list_trolls_path)
     end
 
@@ -23,8 +25,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
     end
 
     it 'returns lists of users who posted from those ips' do
-      expect(response.body).to include(user1.login)
-      expect(response.body).to include(user2.login)
+      expect(response.body).to include(troll1.login)
+      expect(response.body).to include(troll2.login)
     end
   end
 end

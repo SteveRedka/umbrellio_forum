@@ -1,14 +1,9 @@
 class Api::V1::PostsController < ApplicationController
   include JSONErrors
-  before_action :set_user, only: %i[create]
+  # before_action :set_user, only: %i[create]
 
   def create
-    @post = Post.new(post_params)
-    @post.user = @user
-    @post.ip = user_params[:ip]
-    raise ArgumentError, @post.errors.messages unless @post.valid?
-
-    @post.save
+    @post = Posts::PostCreateHandler.new(post_params).call
     render json: @post
   end
 
@@ -26,18 +21,18 @@ class Api::V1::PostsController < ApplicationController
   private
 
   def post_params
-    params.require('post').permit(:header, :content)
+    params.permit(:header, :content, :login, :ip)
   end
 
-  def user_params
-    params.require('user').permit(:login, :ip)
-  end
+  # def user_params
+  #   params.require('user').permit(:login, :ip)
+  # end
 
   def rating_params
     params.require('rating').permit(:value, :post_id)
   end
 
-  def set_user
-    @user = User.find_or_create_by(login: user_params[:login])
-  end
+  # def set_user
+  #   @user = User.find_or_create_by(login: user_params[:login])
+  # end
 end
