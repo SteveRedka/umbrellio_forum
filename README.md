@@ -19,7 +19,7 @@ curl -H "Content-Type: application/json" -X GET https://umbrellio-forum.herokuap
 Creates a new post. Also creates an author, if it doesn't exist already, and keeps track of ips. Requires ip passed as an argument: it doesn't gather them from `remote_request`.
 
 ```
-curl -H "Content-Type: application/json" -X POST -d '{ header: "Lorem", content: "Ipsum", ip: "8.8.8.8", login: "me" }' https://umbrellio-forum.herokuapp.com/api/posts
+curl -H "Content-Type: application/json" -X POST -d '{ "header": "Lorem", "content": "Ipsum", "ip": "8.8.8.8", "login": "me" }' https://umbrellio-forum.herokuapp.com/api/posts
 ```
 
 #### POST /api/rate

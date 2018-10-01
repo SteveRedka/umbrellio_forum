@@ -8,7 +8,7 @@ module Ratings
     validates_inclusion_of :value, in: 1..5
 
     def initialize(params)
-      @post = Post.find(params[:post_id])
+      @post = Post.find(params[:post_id].to_i)
       @value = params[:value].to_i
       @silent = params[:silent]
       raise ArgumentError, errors.messages unless valid?
@@ -23,7 +23,8 @@ module Ratings
 
     def get_average_rating(post)
       post.ratings
-          .inject(0.0) { |sum, rating| sum + rating.value } / post.ratings.size
+          .inject(0.0) { |sum, rating| sum + rating.value } / post.ratings.size.to_f
+      # post.average_rating
     end
   end
 end
