@@ -19,6 +19,17 @@ RSpec.describe Ratings::RateHandler do
                                       value: 5).call
       end.to raise_error(ActiveRecord::RecordNotFound)
     end
+
+    it 'raises an error if value is inapropriate' do
+      expect do
+        Ratings::RateHandler.new(post_id: rateable.id,
+                                      value: 99).call
+      end.to raise_error(ArgumentError)
+      expect do
+        Ratings::RateHandler.new(post_id: rateable.id,
+                                      value: -5).call
+      end.to raise_error(ArgumentError)
+    end
   end
 end
 

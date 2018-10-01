@@ -4,11 +4,12 @@ module Ratings
   class RateHandler
     include ActiveModel::Validations
     attr_reader :post, :value
-    validates :post, :value, presence: true
+    validates :post, presence: true
+    validates_inclusion_of :value, in: 1..5
 
     def initialize(params)
       @post = Post.find(params[:post_id])
-      @value = params[:value]
+      @value = params[:value].to_i
       @silent = params[:silent]
       raise ArgumentError, errors.messages unless valid?
     end
