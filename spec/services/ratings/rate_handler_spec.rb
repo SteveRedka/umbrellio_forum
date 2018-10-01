@@ -10,8 +10,6 @@ RSpec.describe Ratings::RateHandler do
                                     value: 4).call).to eq(4.5)
   end
 
-  it 'handles concurrent requests properly'
-
   context 'invalid requests' do
     it 'raises an error if post doesn`t exist' do
       expect do
@@ -30,6 +28,22 @@ RSpec.describe Ratings::RateHandler do
                                       value: -5).call
       end.to raise_error(ArgumentError)
     end
+  end
+
+  it 'handles concurrent requests properly' do
+    Ratings::RateHandler.new(post_id: rateable.id,
+                                  value: 1).call
+    requests_count = 10
+    threads = []
+    average_ratings = []
+    requests_count.times do
+      threads << Thread.new do
+        average_ratings << Ratings::RateHandler.new(post_id: rateable.id,
+                                                    value: 5).call
+      end
+    end
+    threads.each { |t| t.join }
+    expect(average_ratings.uniq.length).to eq(requests_count)
   end
 end
 

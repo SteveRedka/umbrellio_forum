@@ -22,9 +22,8 @@ module Ratings
     private
 
     def get_average_rating(post)
-      post.ratings
-          .inject(0.0) { |sum, rating| sum + rating.value } / post.ratings.size.to_f
-      # post.average_rating
+      relevant_ratings = Rating.where('id <= ?', @rating.id)
+      relevant_ratings.inject(0.0) { |sum, rating| sum + rating.value } / relevant_ratings.size
     end
   end
 end
