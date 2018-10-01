@@ -21,7 +21,7 @@ RSpec.describe Posts::PostCreateHandler do
       end
 
       it 'assigns existing author to new post' do
-        author = create :user, login: 'author'
+        create :user, login: 'author'
         expect do
           Posts::PostCreateHandler.new(valid_params).call
         end.to change { User.count }.by(0)
@@ -36,11 +36,11 @@ RSpec.describe Posts::PostCreateHandler do
       end
 
       context 'exists' do
+        other_params = { header: 'other_header',
+                         content: 'other_content',
+                         ip: '127.0.0.1',
+                         login: 'other_user' }
         before do
-          other_params = { header: 'other_header',
-                           content: 'other_content',
-                           ip: '127.0.0.1',
-                           login: 'other_user' }
           Posts::PostCreateHandler.new(other_params).call
         end
 
@@ -50,7 +50,11 @@ RSpec.describe Posts::PostCreateHandler do
           end.to change { PosterIp.count }.by(0)
         end
 
-        it 'doesn`t write duplicate user ids in PosterIp'
+        it 'doesn`t write duplicate user_ids and user_logins in PosterIp' do
+          Posts::PostCreateHandler.new(other_params).call
+          Posts::PostCreateHandler.new(other_params).call
+          expect(PosterIp.last.user_ids.length).to eq(1)
+        end
       end
     end
   end
