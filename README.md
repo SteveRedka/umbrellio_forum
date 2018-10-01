@@ -50,5 +50,3 @@ bundle
 rake db:setup
 rails server
 ```
-
-The `rake db:setup` task is pretty huge. It can be interrupted as early as you please.
