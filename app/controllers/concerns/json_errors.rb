@@ -8,15 +8,15 @@ module JSONErrors
     rescue_from ActionController::ParameterMissing, with: :render_400
     rescue_from ArgumentError,                      with: :render_400
 
-    def render_400(err)
+    def render_400(err = ['Invalid parameter'])
       render_errors(err, 400)
     end
 
-    def render_404(err)
+    def render_404(err = ['Route not found'])
       render_errors(err, 404)
     end
 
-    def render_500(err)
+    def render_500(err = ['Internal server error'])
       render_errors(err, 500)
     end
 
