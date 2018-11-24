@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Ratings::RateHandler do
   let!(:rateable) { create :post }
+  let!(:rateable_alternative) { create :post }
 
   it 'returns average rating of a post' do
     expect(Ratings::RateHandler.new(post_id: rateable.id,
@@ -44,6 +45,12 @@ RSpec.describe Ratings::RateHandler do
     end
     threads.each { |t| t.join }
     expect(average_ratings.uniq.length).to eq(requests_count)
+  end
+
+  it 'returns correct new rating' do
+    Ratings::RateHandler.new(post_id: rateable_alternative.id, value: 3).call
+    expect(Ratings::RateHandler.new(post_id: rateable.id,
+                                    value: 1).call).to eq 1
   end
 end
 

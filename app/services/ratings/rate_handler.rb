@@ -16,14 +16,9 @@ module Ratings
 
     def call
       @rating = @post.ratings.create(post: @post, value: @value)
-      get_average_rating(@post) unless @silent
-    end
+      return if @silent
 
-    private
-
-    def get_average_rating(post)
-      relevant_ratings = Rating.where('id <= ?', @rating.id)
-      relevant_ratings.inject(0.0) { |sum, rating| sum + rating.value } / relevant_ratings.size
+      Posts::AverageRatingUpdater.new(post, latest_rating: @rating).call
     end
   end
 end
