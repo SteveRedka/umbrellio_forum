@@ -28,13 +28,8 @@ module Posts
     end
 
     def set_poster_ip
-      @poster_ip = PosterIp.find_or_initialize_by(ip: @ip)
-      return if !@poster_ip.new_record? &&
-                @poster_ip.user_ids.include?(@user.id.to_s)
-
-      @poster_ip.user_ids << @user.id.to_s
-      @poster_ip.user_logins << @user.login
-      @poster_ip.save
+      @poster_ip = PosterIp.joins(:users).find_or_create_by(ip: @ip)
+      @poster_ip.users << @user unless @poster_ip.users.find_by(id: @user.id)
       @poster_ip
     end
   end
