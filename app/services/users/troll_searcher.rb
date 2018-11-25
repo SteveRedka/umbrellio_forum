@@ -1,5 +1,9 @@
 module Users
   # Handles #list_trolls in users_controller.rb
+  # Returns hash with ips as keys and array of logins as values
+  # Example:
+  # { '127.0.0.1': ['admin'],
+  #   '8.8.8.8': ['new_user', 'other_user'] }
   class TrollSearcher
     def call
       troll_ips = PosterIp.joins(:users)
