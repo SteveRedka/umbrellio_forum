@@ -16,6 +16,18 @@ RSpec.describe 'Api::V1::Posts', type: :request do
       expect(response.body).to include(valid_request[:content])
       expect(Post.last.user).to eq(user)
     end
+
+    context 'with invalid data' do
+      it 'returns unprocessable entry code with validation errors' do
+        expect do
+          post(api_posts_path, params: { login: 'author' })
+        end.to change { Post.count }.by(0)
+        expect(response.body).to include('error')
+        expect(response.body).to include('header')
+        expect(response.body).to include('content')
+        expect(response).to have_http_status(422)
+      end
+    end
   end
 
   describe 'GET /api/posts' do

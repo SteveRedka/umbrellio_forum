@@ -1,15 +1,9 @@
 class Api::V1::PostsController < ApplicationController
-  include JSONErrors
-
   def create
     @post = Posts::PostCreateHandler.new(post_params).call
     render json: @post, except: %i[created_at updated_at poster_ip_id]
-  end
-
-  def rate
-    @post = Post.find(rating_params[:post_id])
-    @rating = @post.ratings.create(rating_params)
-    render json: { 'post': @post.id, 'new rating': @post.average_rating }
+  rescue ArgumentError => error
+    render_422(error.message)
   end
 
   def index

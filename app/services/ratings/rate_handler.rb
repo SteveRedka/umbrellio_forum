@@ -5,7 +5,8 @@ module Ratings
     include ActiveModel::Validations
     attr_reader :post, :value
     validates :post, presence: true
-    validates_inclusion_of :value, in: 1..5
+    validates_inclusion_of :value, in: 1..5,
+                                   message: 'should be between 1 and 5'
 
     def initialize(params)
       @post = Post.find(params[:post_id].to_i)
