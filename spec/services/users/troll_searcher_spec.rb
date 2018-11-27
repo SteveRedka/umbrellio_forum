@@ -14,11 +14,11 @@ RSpec.describe Users::TrollSearcher do
   end
 
   it 'doesn`t return ips that had only one user posting from them' do
-    expect(Users::TrollSearcher.new.call[legit_ip.ip]).to be_nil
+    expect(Users::TrollSearcher.new.call[legit_ip.ip]).to be_empty
   end
 
   it 'returns ips that had multiple users posting from them' do
-    expect(Users::TrollSearcher.new.call[troll_ip.ip]).not_to be_nil
+    expect(Users::TrollSearcher.new.call[troll_ip.ip]).not_to be_empty
   end
 
   it 'returns lists of users who posted from those ips' do
