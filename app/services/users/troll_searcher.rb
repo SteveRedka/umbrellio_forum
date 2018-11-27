@@ -6,12 +6,21 @@ module Users
   #   '8.8.8.8': ['new_user', 'other_user'] }
   class TrollSearcher
     def call
-      troll_ips = PosterIp.joins(:users)
-                          .where(ip: PosterIp.select('ip')
-                                             .joins(:users)
-                                             .group('poster_ips.id')
-                                             .having('COUNT(poster_ips_users) > 1'))
-                          .select('users.login, poster_ips.ip')
+      awful_raw_sql = <<-SQL
+        SELECT  users.login, poster_ips.ip
+        FROM poster_ips
+        JOIN poster_ips_users ON poster_ips_users.poster_ip_id = poster_ips.id
+        JOIN users ON users.id = poster_ips_users.user_id
+        WHERE poster_ips.ip IN (
+          SELECT poster_ips.ip
+          FROM poster_ips
+          JOIN poster_ips_users ON poster_ips_users.poster_ip_id = poster_ips.id
+          JOIN users ON users.id = poster_ips_users.user_id
+          GROUP BY poster_ips.id
+          HAVING (COUNT(poster_ips_users) > 1)
+          )
+      SQL
+      troll_ips = ActiveRecord::Base.connection.execute(awful_raw_sql)
 
       result = Hash.new { |ip, users| ip[users] = [] }
       troll_ips.to_a.each do |troll_ip|
