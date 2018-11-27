@@ -9,15 +9,16 @@ RSpec.describe Post, type: :model do
 
   context 'ratings' do
     before do
-      create :rating, post: post, value: 4
-      create :rating, post: post, value: 5
+      post.ratings.create(value: 4)
+      post.ratings.create(value: 5)
     end
 
     it 'has many ratings' do
       expect(post.ratings.count).to eq(2)
     end
 
-    it 'returns average rating' do
+    it 'can update its average rating manually' do
+      post.reset_average_rating
       expect(post.average_rating).to eq(4.5)
     end
   end

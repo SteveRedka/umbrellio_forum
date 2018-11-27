@@ -16,10 +16,13 @@ module Ratings
     end
 
     def call
-      @rating = @post.ratings.create(post: @post, value: @value)
+      @post.with_lock do
+        @post.ratings.create(post: @post, value: @value)
+        @post.update_attributes(rating_sum: @post.rating_sum + @value)
+      end
       return if @silent
 
-      Posts::AverageRatingUpdater.new(post, latest_rating: @rating).call
+      @post.average_rating
     end
   end
 end
